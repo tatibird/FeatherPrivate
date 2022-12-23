@@ -358,49 +358,6 @@ function getitem(itm)
     return false
 end
 
---skided
-local RunLoops = {RenderStepTable = {}, StepTable = {}, HeartTable = {}}
-do
-	function RunLoops:BindToRenderStep(name, num, func)
-		if RunLoops.RenderStepTable[name] == nil then
-			RunLoops.RenderStepTable[name] = game:GetService("RunService").RenderStepped:Connect(func)
-		end
-	end
-
-	function RunLoops:UnbindFromRenderStep(name)
-		if RunLoops.RenderStepTable[name] then
-			RunLoops.RenderStepTable[name]:Disconnect()
-			RunLoops.RenderStepTable[name] = nil
-		end
-	end
-
-	function RunLoops:BindToStepped(name, num, func)
-		if RunLoops.StepTable[name] == nil then
-			RunLoops.StepTable[name] = game:GetService("RunService").Stepped:Connect(func)
-		end
-	end
-
-	function RunLoops:UnbindFromStepped(name)
-		if RunLoops.StepTable[name] then
-			RunLoops.StepTable[name]:Disconnect()
-			RunLoops.StepTable[name] = nil
-		end
-	end
-
-	function RunLoops:BindToHeartbeat(name, num, func)
-		if RunLoops.HeartTable[name] == nil then
-			RunLoops.HeartTable[name] = game:GetService("RunService").Heartbeat:Connect(func)
-		end
-	end
-
-	function RunLoops:UnbindFromHeartbeat(name)
-		if RunLoops.HeartTable[name] then
-			RunLoops.HeartTable[name]:Disconnect()
-			RunLoops.HeartTable[name] = nil
-		end
-	end
-end -- end of skidee 
-
 runcode(function()
     local AntiVoiding = false
     local Connection
@@ -772,10 +729,10 @@ runcode(function()
                                     velo.Velocity = Vector3.new(0,i*1,0)
                                 end
                             elseif Mode["Value"] == "Funny" then
-                                for i = 1,7 do
-                                    task.wait()
+                                for i = 2,30,2 do
+                                    task.wait(0.01)
                                     if not Enabled then return end
-                                    velo.Velocity = Vector3.new(0,i*1.40+(flyup and 38 or 0)+(flydown and -37 or 0),0)
+                                    velo.Velocity = Vector3.new(0,25 + i,0)
                                 end
                             elseif Mode["Value"] == "Moonsoon" then
                                 for i = 1,10 do
@@ -842,6 +799,120 @@ runcode(function()
         ["Default"] = "Moonsoon"
     })
 end)
+
+
+--[[runcode(function()
+    local ui
+    spawn(function()
+        ui = Instance.new("ScreenGui",game:GetService("CoreGui"))
+        ui.Name = "BetterFlyUI"
+        ui.Enabled = false
+        if syn then syn.protect_gui(ui) end
+        local label = Instance.new("TextLabel")
+        label.TextSize = 16
+        label.Position = UDim2.new(0.4404,0,0.4700,0)
+        label.Size = UDim2.new(0.1181,0,0.1374,0)
+        label.BackgroundColor3 = Color3.fromRGB(255,255,255)
+        label.BackgroundTransparency = 1
+        label.Text = "Safe\nStuds: 0\nY: 0\nTime: 0"
+        label.TextColor3 = Color3.fromRGB(65,255,65)
+        label.Parent = ui
+    end)
+    local velo
+    local part
+    local clone
+    local Enabled = false
+    local BetterFly = Tabs["Blatant"]:CreateToggle({
+        ["Name"] = "BetterFly",
+        ["Callback"] = function(Callback)
+            Enabled = Callback
+            if Enabled then
+                spawn(function()
+                    local char = lplr.Character
+                    local starttick = tick()
+                    local startpos = char:FindFirstChild("HumanoidRootPart").Position
+                    ui.Enabled = true
+                    char.Archivable = true
+                    clone = char:Clone()
+                    velo = Instance.new("BodyVelocity")
+                    velo.MaxForce = Vector3.new(9e9,9e9,9e9)
+                    velo.Parent = char:FindFirstChild("HumanoidRootPart")
+                    clone.Parent = game:GetService("Workspace")
+                    cam.CameraSubject = clone:FindFirstChild("Humanoid")
+                    part = Instance.new("Part")
+                    part.Anchored = true
+                    part.Size = Vector3.new(10,1,10)
+                    part.Transparency = 1
+                    part.CFrame = clone:FindFirstChild("HumanoidRootPart").CFrame - Vector3.new(0,5,0)
+                    part.Parent = game:GetService("Workspace")
+                    for i,v in pairs(char:GetChildren()) do
+                        if string.lower(v.ClassName):find("part") and v.Name ~= "HumanoidRootPart" then
+                            v.Transparency = 1
+                        end
+                        if v:IsA("Accessory") then
+                            v:FindFirstChild("Handle").Transparency = 1
+                        end
+                    end
+                    char:FindFirstChild("Head"):FindFirstChild("face").Transparency = 1
+                    spawn(function()
+                        while task.wait() do
+                            if not Enabled then
+                                local studs = (startpos - char:FindFirstChild("HumanoidRootPart").Position).Magnitude
+                                local time_ = math.abs(starttick - tick())
+                                CreateNotification("BetterFly","Flew "..math.floor(studs).." Studs in "..time_.." Seconds!",5)
+                                return
+                            end
+                            local studs = (startpos - char:FindFirstChild("HumanoidRootPart").Position).Magnitude
+                            local Y = char:FindFirstChild("HumanoidRootPart").Position.Y
+                            local calctime = math.abs(starttick - tick())
+                            if isnetworkowner(char:FindFirstChild("HumanoidRootPart")) then
+                                ui.TextLabel.TextColor3 = Color3.fromRGB(65,255,65)
+                                ui.TextLabel.Text = "Safe\nStuds: "..math.floor(studs).."\nY: "..math.floor(Y).."\nTime: "..math.floor(calctime)
+                            else
+                                ui.TextLabel.TextColor3 = Color3.fromRGB(255,65,65)
+                                ui.TextLabel.Text = "Unsafe\nStuds: "..math.floor(studs).."\nY: "..math.floor(Y).."\nTime: "..math.floor(calctime)
+                            end
+                        end
+                    end)
+                    spawn(function()
+                        while task.wait() do
+                            if not Enabled then return end
+                            for i = 2,30,2 do
+                                task.wait(0.01)
+                                if not Enabled then return end
+                                part.CFrame = CFrame.new(clone:FindFirstChild("HumanoidRootPart").CFrame.X,part.CFrame.Y,clone:FindFirstChild("HumanoidRootPart").CFrame.Z)
+                                clone:FindFirstChild("HumanoidRootPart").CFrame = CFrame.new(char:FindFirstChild("HumanoidRootPart").CFrame.X,clone:FindFirstChild("HumanoidRootPart").CFrame.Y,char:FindFirstChild("HumanoidRootPart").CFrame.Z)
+                                clone:FindFirstChild("HumanoidRootPart").Rotation = char:FindFirstChild("HumanoidRootPart").Rotation
+                                if char:FindFirstChild("Humanoid").MoveDirection.Magnitude > 0 then
+                                    velo.Velocity = lplr.Character:FindFirstChild("HumanoidRootPart").CFrame.LookVector * char:FindFirstChild("Humanoid").WalkSpeed + Vector3.new(0,25 + i,0)
+                                else
+                                    velo.Velocity = Vector3.new(0,25 + i,0)
+                                end
+                            end
+                        end
+                    end)
+                end)
+            else
+                for i,v in pairs(lplr.Character:GetChildren()) do
+                    if string.lower(v.ClassName):find("part") and v.Name ~= "HumanoidRootPart" then
+                        v.Transparency = 0
+                    end
+                    if v:IsA("Accessory") then
+                        v:FindFirstChild("Handle").Transparency = 0
+                    end
+                end
+                lplr.Character:FindFirstChild("Head"):FindFirstChild("face").Transparency = 0
+                cam.CameraSubject = lplr.Character:FindFirstChild("Humanoid")
+                task.delay(0.1, function() velo:Destroy() end)
+                velo.Velocity = Vector3.new(0,-100,0)
+                velo:Destroy()
+                part:Destroy()
+                clone:Destroy()
+                ui.Enabled = false
+            end
+        end
+    })
+end)--]]
 
 runcode(function()
     function GetBeds()
@@ -1749,35 +1820,6 @@ runcode(function()
                 char:FindFirstChild("Animate").Disabled = true
                 char:FindFirstChild("Animate").Disabled = false
                 settings():GetService("NetworkSettings").IncomingReplicationLag = 0
-            end
-        end
-    })
-end)
-
-runcode(function()
-    local Enabled = false
-    local Sky = Tabs["Render"]:CreateToggle({
-        ["Name"] = "DarkMountain",
-        ["Callback"] = function(Callback)
-            Enabled = Callback
-            if Enabled then
-            game.Lighting.Sky.SkyboxBk = "http://www.roblox.com/Asset/?ID=12064107"
-            game.Lighting.Sky.SkyboxDn = "http://www.roblox.com/Asset/?ID=12064152"
-            game.Lighting.Sky.SkyboxFt = "http://www.roblox.com/Asset/?ID=12064121"
-            game.Lighting.Sky.SkyboxLf = "http://www.roblox.com/Asset/?ID=12063984"
-            game.Lighting.Sky.SkyboxRt = "http://www.roblox.com/Asset/?ID=12064115"
-            game.Lighting.Sky.SkyboxUp = "http://www.roblox.com/Asset/?ID=12064131"
-            else
-            game.Lighting.Sky.SkyboxBk = "http://www.roblox.com/asset/?id=7018684000"
-            game.Lighting.Sky.SkyboxDn = "http://www.roblox.com/asset/?id=6334928194"
-            game.Lighting.Sky.SkyboxFt = "http://www.roblox.com/asset/?id=7018684000"
-            game.Lighting.Sky.SkyboxLf = "http://www.roblox.com/asset/?id=7018684000"
-            game.Lighting.Sky.SkyboxRt = "http://www.roblox.com/asset/?id=7018684000"
-            game.Lighting.Sky.SkyboxUp = "http://www.roblox.com/asset/?id=7018689553"
-            game.Lighting.FogColor = Color3.new(1, 1, 1)
-            game.Lighting.FogEnd = "10000"
-            game.Lighting.FogStart = "0"
-            game.Lighting.Ambient = Color3.new(0, 0, 0)
             end
         end
     })
