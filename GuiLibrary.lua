@@ -3,7 +3,7 @@ local array
 if shared["betterisfile"]("Feather-Client/ArrayList.lua") then
     array = loadstring(readfile("Feather-Client/ArrayList.lua"))()
 else
-    array = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ln3242/Feather-Client/main/ArrayList.lua"))()
+    array = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ln3242/FeatherPrivate/main/ArrayList.lua"))()
 end
 local lib = {
     ["Rainbow"] = false,
