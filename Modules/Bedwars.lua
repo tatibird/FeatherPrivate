@@ -1824,3 +1824,32 @@ runcode(function()
         end
     })
 end)
+
+runcode(function()
+    local Enabled = false
+    local Sky = Tabs["Render"]:CreateToggle({
+        ["Name"] = "DarkMountain",
+        ["Callback"] = function(Callback)
+            Enabled = Callback
+            if Enabled then
+            game.Lighting.Sky.SkyboxBk = "http://www.roblox.com/Asset/?ID=12064107"
+            game.Lighting.Sky.SkyboxDn = "http://www.roblox.com/Asset/?ID=12064152"
+            game.Lighting.Sky.SkyboxFt = "http://www.roblox.com/Asset/?ID=12064121"
+            game.Lighting.Sky.SkyboxLf = "http://www.roblox.com/Asset/?ID=12063984"
+            game.Lighting.Sky.SkyboxRt = "http://www.roblox.com/Asset/?ID=12064115"
+            game.Lighting.Sky.SkyboxUp = "http://www.roblox.com/Asset/?ID=12064131"
+            else
+            game.Lighting.Sky.SkyboxBk = "http://www.roblox.com/asset/?id=7018684000"
+            game.Lighting.Sky.SkyboxDn = "http://www.roblox.com/asset/?id=6334928194"
+            game.Lighting.Sky.SkyboxFt = "http://www.roblox.com/asset/?id=7018684000"
+            game.Lighting.Sky.SkyboxLf = "http://www.roblox.com/asset/?id=7018684000"
+            game.Lighting.Sky.SkyboxRt = "http://www.roblox.com/asset/?id=7018684000"
+            game.Lighting.Sky.SkyboxUp = "http://www.roblox.com/asset/?id=7018689553"
+            game.Lighting.FogColor = Color3.new(1, 1, 1)
+            game.Lighting.FogEnd = "10000"
+            game.Lighting.FogStart = "0"
+            game.Lighting.Ambient = Color3.new(0, 0, 0)
+            end
+        end
+    })
+end)
