@@ -17,7 +17,7 @@ local lib
 if shared["betterisfile"]("Feather-ClientConfigs/GuiLibrary") then
     lib = loadstring(readfile("Feather-ClientConfigs/GuiLibrary.lua"))()
 else
-    lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ln3242/FeatherPrivate/main/GuiLibrary.lua"))()
+    lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/EZEZEZEZZE/FeatherPrivate/main/GuiLibrary.lua"))()
 end
 local getasset = getsynasset or getcustomasset
 local ScreenGuitwo = game:GetService("CoreGui").RektskyNotificationGui
