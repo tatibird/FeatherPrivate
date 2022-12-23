@@ -771,12 +771,12 @@ runcode(function()
                                     if not Enabled then return end
                                     velo.Velocity = Vector3.new(0,i*1,0)
                                 end
-                            --elseif Mode["Value"] == "Funny" then
-                                --for i = 1,7 do
-                                    --task.wait()
-                                    --if not Enabled then return end
-                                    --velo.Velocity = Vector3.new(0,i*1.40+(flyup and 38 or 0)+(flydown and -37 or 0),0)
-                                --end
+                            elseif Mode["Value"] == "Funny" then
+                                for i = 1,7 do
+                                    task.wait()
+                                    if not Enabled then return end
+                                    velo.Velocity = Vector3.new(0,i*1.40+(flyup and 38 or 0)+(flydown and -37 or 0),0)
+                                end
                             elseif Mode["Value"] == "Moonsoon" then
                                 for i = 1,10 do
                                     task.wait()
@@ -838,7 +838,7 @@ runcode(function()
         ["Function"] = function(v) 
             Mode["Value"] = v
         end,
-        ["List"] = {"Long",--[["Funny"--]],"FunnyOld","Moonsoon","Bounce","Bounce2"},
+        ["List"] = {"Long","Funny","FunnyOld","Moonsoon","Bounce","Bounce2"},
         ["Default"] = "Moonsoon"
     })
 end)
