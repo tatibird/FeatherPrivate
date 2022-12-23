@@ -689,8 +689,10 @@ runcode(function()
                         bedwars["BalloonController"].inflateBalloon()
                         bedwars["BalloonController"].deflateBalloon = function() end
                     end
+                    game:GetService("Workspace").Gravity = 0
                     velo = Instance.new("BodyVelocity")
                     velo.MaxForce = Vector3.new(0,9e9,0)
+                    velo.Velocity = Vector3.zero
                     velo.Parent = lplr.Character:FindFirstChild("HumanoidRootPart")
                     Connection = uis.InputBegan:Connect(function(input)
                         if input.KeyCode == Enum.KeyCode.Space then
@@ -776,6 +778,7 @@ runcode(function()
                     end)
                 end)
             else
+                game:GetService("Workspace").Gravity = 196.2
                 velo:Destroy()
                 Connection:Disconnect()
                 Connection2:Disconnect()
@@ -799,7 +802,6 @@ runcode(function()
         ["Default"] = "Moonsoon"
     })
 end)
-
 
 --[[runcode(function()
     local ui
