@@ -1760,7 +1760,7 @@ end)
 runcode(function()
     local Enabled = false
     local Sky = Tabs["Render"]:CreateToggle({
-        ["Name"] = "Dark Mountain Sky",
+        ["Name"] = "DarkMountain",
         ["Callback"] = function(Callback)
             Enabled = Callback
             if Enabled then
