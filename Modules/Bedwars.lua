@@ -17,7 +17,7 @@ local lib
 if shared["betterisfile"]("Feather-ClientConfigs/GuiLibrary") then
     lib = loadstring(readfile("Feather-ClientConfigs/GuiLibrary.lua"))()
 else
-    lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ln3242/Feather-Client/main/GuiLibrary.lua"))()
+    lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ln3242/FeatherPrivate/main/GuiLibrary.lua"))()
 end
 local getasset = getsynasset or getcustomasset
 local ScreenGuitwo = game:GetService("CoreGui").RektskyNotificationGui
@@ -1799,6 +1799,42 @@ runcode(function()
     local Enabled = false
     local Blink = Tabs["Render"]:CreateToggle({
         ["Name"] = "Blink",
+        ["Callback"] = function(Callback)
+            Enabled = Callback
+            if Enabled then
+                settings():GetService("NetworkSettings").IncomingReplicationLag = 99e99
+                char = lplr.Character
+                char.Archivable = true
+                clone = char:Clone()
+                clone.Parent = game:GetService("Workspace")
+                cam.CameraSubject = clone:FindFirstChild("Humanoid")
+                char.Parent = nil
+                lplr.Character = clone
+                clone:FindFirstChild("Animate").Disabled = true
+                clone:FindFirstChild("Animate").Disabled = false
+                clone:FindFirstChild("HumanoidRootPart").Anchored = false
+                settings():GetService("NetworkSettings").IncomingReplicationLag = 0
+            else
+                settings():GetService("NetworkSettings").IncomingReplicationLag = 99e99
+                clone:Destroy()
+                char.Parent = game:GetService("Workspace")
+                lplr.Character = char
+                cam.CameraSubject = char:FindFirstChild("Humanoid")
+                char:FindFirstChild("Animate").Disabled = true
+                char:FindFirstChild("Animate").Disabled = false
+                settings():GetService("NetworkSettings").IncomingReplicationLag = 0
+            end
+        end
+    })
+end)
+
+
+runcode(function()
+    local clone
+    local char
+    local Enabled = false
+    local Blink = Tabs["Render"]:CreateToggle({
+        ["Name"] = "Test",
         ["Callback"] = function(Callback)
             Enabled = Callback
             if Enabled then
