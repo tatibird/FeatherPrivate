@@ -772,10 +772,10 @@ runcode(function()
                                     velo.Velocity = Vector3.new(0,i*1,0)
                                 end
                             elseif Mode["Value"] == "Funny" then
-                                for i = 2,30,2 do
-                                    task.wait(0.01)
+                                for i = 1,7 do
+                                    task.wait()
                                     if not Enabled then return end
-                                    velo.Velocity = Vector3.new(0,25 + i,0)
+                                    velo.Velocity = Vector3.new(0,i*1.40+(flyup and 45 or 0)+(flydown and -45 or 0),0)
                                 end
                             elseif Mode["Value"] == "Moonsoon" then
                                 for i = 1,10 do
